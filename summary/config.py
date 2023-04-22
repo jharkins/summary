@@ -1,13 +1,14 @@
 import os
 import configparser
+from .print_utils import print_colored, input_colored
 
 CONFIG_FILE = os.path.join(os.path.dirname(__file__), "config.ini")
 
 
 def is_valid_api_key(api_key):
-    if api_key is None:
+    if not api_key or api_key.isspace():
         return False
-    return len(api_key) > 10 and api_key.startswith("sk-")
+    return True
 
 
 def get_config():
@@ -20,8 +21,8 @@ def get_config():
 
 
 def save_config(config):
-    with open(CONFIG_FILE, "w") as f:
-        config.write(f)
+    with open(CONFIG_FILE, "w") as configfile:
+        config.write(configfile)
 
 
 def get_api_key():
@@ -31,13 +32,13 @@ def get_api_key():
         config.add_section("OpenAI")
 
         while True:
-            api_key = input("Please enter your OpenAI API Key: ")
+            api_key = input_colored("Please enter your OpenAI API Key: ", level="info")
             if is_valid_api_key(api_key):
                 config.set("OpenAI", "api_key", api_key)
                 save_config(config)
                 break
             else:
-                print("Invalid API key. Please try again.")
+                print_colored("Invalid API key. Please try again.", level="error")
 
         return api_key
     else:
