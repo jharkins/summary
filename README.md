@@ -15,7 +15,6 @@ pip install -r requirements.txt
 
 ```
 python setup.py develop
-
 ```
 
 4. Set up an API key for the OpenAI API. The tool will prompt you to enter your API key the first time it runs. The key will be stored in a `config.ini` file located in the project directory for future use.
