@@ -1,14 +1,18 @@
 import argparse
+from colorama import Fore, Style, init
 from .config import get_api_key
+
+# Initialize colorama
+init(autoreset=True)
 
 
 def main():
     api_key = get_api_key()
     if api_key is None:
-        print("No API key found. Please run `summary config` first.")
+        print(Fore.RED + "Error: API key not found")
         return
 
-    parser = argparse.ArgumentParser(description="Summary")
+    parser = argparse.ArgumentParser(description="My CLI tool")
     parser.add_argument(
         "-a", "--action", type=str, required=True, help="An action to perform"
     )
@@ -16,9 +20,9 @@ def main():
     args = parser.parse_args()
 
     if args.action == "greet":
-        print(f"Hello, {args.name}!")
+        print(Fore.GREEN + f"Hello, {args.name}!")
     else:
-        print(f"Unknown action: {args.action}")
+        print(Fore.YELLOW + f"Unknown action: {args.action}")
 
 
 if __name__ == "__main__":

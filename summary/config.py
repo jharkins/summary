@@ -4,6 +4,12 @@ import configparser
 CONFIG_FILE = os.path.join(os.path.dirname(__file__), "config.ini")
 
 
+def is_valid_api_key(api_key):
+    if api_key is None:
+        return False
+    return len(api_key) > 10 and api_key.startswith("sk-")
+
+
 def get_config():
     config = configparser.ConfigParser()
     if os.path.exists(CONFIG_FILE):
@@ -23,9 +29,16 @@ def get_api_key():
     if config is None:
         config = configparser.ConfigParser()
         config.add_section("OpenAI")
-        api_key = input("Please enter your OpenAI API key: ")
-        config.set("OpenAI", "api_key", api_key)
-        save_config(config)
+
+        while True:
+            api_key = input("Please enter your OpenAI API Key: ")
+            if is_valid_api_key(api_key):
+                config.set("OpenAI", "api_key", api_key)
+                save_config(config)
+                break
+            else:
+                print("Invalid API key. Please try again.")
+
         return api_key
     else:
         return config.get("OpenAI", "api_key", fallback=None)
